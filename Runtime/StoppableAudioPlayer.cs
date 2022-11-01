@@ -3,16 +3,31 @@ using UnityEngine;
 
 namespace Kogane
 {
+    /// <summary>
+    /// 再生中の AudioClip を停止できるコンポーネント
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class StoppableAudioPlayer : MonoBehaviour
     {
+        //================================================================================
+        // 変数(SerializeField)
+        //================================================================================
         [SerializeField] private AudioSource[] m_audioSources;
 
+        //================================================================================
+        // 関数
+        //================================================================================
+        /// <summary>
+        /// 再生します
+        /// </summary>
         public IDisposable Play( AudioClip audioClip )
         {
             return Play( audioClip, null );
         }
 
+        /// <summary>
+        /// 再生します
+        /// </summary>
         public IDisposable Play( AudioClip audioClip, float? volume )
         {
             foreach ( var audioSource in m_audioSources )
@@ -34,6 +49,9 @@ namespace Kogane
             return Disposable.Empty;
         }
 
+        /// <summary>
+        /// 停止します
+        /// </summary>
         public void Stop( AudioClip audioClip )
         {
             foreach ( var audioSource in m_audioSources )
