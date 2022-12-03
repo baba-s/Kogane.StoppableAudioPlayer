@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Kogane
@@ -20,7 +20,7 @@ namespace Kogane
         /// <summary>
         /// 再生します
         /// </summary>
-        public IDisposable Play( AudioClip audioClip )
+        public StoppableAudioHandle Play( AudioClip audioClip )
         {
             return Play( audioClip, null );
         }
@@ -28,7 +28,7 @@ namespace Kogane
         /// <summary>
         /// 再生します
         /// </summary>
-        public IDisposable Play( AudioClip audioClip, float? volume )
+        public StoppableAudioHandle Play( AudioClip audioClip, float? volume )
         {
             foreach ( var audioSource in m_audioSources )
             {
@@ -43,10 +43,15 @@ namespace Kogane
 
                 audioSource.Play();
 
-                return Disposable.Create( () => Stop( audioClip ) );
+                return new
+                (
+                    length: audioClip.length,
+                    task: UniTask.Create( () => UniTask.WaitWhile( () => audioSource.isPlaying, cancellationToken: this.GetCancellationTokenOnDestroy() ) ),
+                    onStop: () => Stop( audioClip )
+                );
             }
 
-            return Disposable.Empty;
+            return null;
         }
 
         /// <summary>
