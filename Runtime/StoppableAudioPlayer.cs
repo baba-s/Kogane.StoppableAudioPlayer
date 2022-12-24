@@ -61,7 +61,7 @@ namespace Kogane
         {
             foreach ( var audioSource in m_audioSources )
             {
-                if ( audioSource.clip != audioClip ) continue;
+                if ( audioSource == null || audioSource.clip != audioClip ) continue;
                 audioSource.Stop();
             }
         }
