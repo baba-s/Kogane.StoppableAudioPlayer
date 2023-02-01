@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Kogane
@@ -46,12 +47,24 @@ namespace Kogane
                 return new
                 (
                     length: audioClip.length,
-                    task: UniTask.Create( () => UniTask.WaitWhile( () => audioSource.isPlaying, cancellationToken: this.GetCancellationTokenOnDestroy() ) ),
+                    task: UniTask.Create
+                    (
+                        () =>
+                        {
+                            if ( this == null ) throw new OperationCanceledException();
+
+                            return UniTask.WaitWhile
+                            (
+                                () => audioSource.isPlaying,
+                                cancellationToken: this.GetCancellationTokenOnDestroy()
+                            );
+                        }
+                    ),
                     onStop: () => Stop( audioClip )
                 );
             }
 
-            return null;
+            return new();
         }
 
         /// <summary>

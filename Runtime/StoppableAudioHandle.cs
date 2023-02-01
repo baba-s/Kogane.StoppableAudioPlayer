@@ -50,6 +50,18 @@ namespace Kogane
         }
 
         /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public StoppableAudioHandle() : this
+        (
+            length: 0,
+            task: UniTask.CompletedTask,
+            onStop: null
+        )
+        {
+        }
+
+        /// <summary>
         /// 再生中の AudioClip を停止します
         /// </summary>
         public void Dispose()
