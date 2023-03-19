@@ -23,13 +23,13 @@ namespace Kogane
         /// </summary>
         public StoppableAudioHandle Play( AudioClip audioClip )
         {
-            return Play( audioClip, null );
+            return Play( audioClip, null, null );
         }
 
         /// <summary>
         /// 再生します
         /// </summary>
-        public StoppableAudioHandle Play( AudioClip audioClip, float? volume )
+        public StoppableAudioHandle Play( AudioClip audioClip, float? volume, float? pitch )
         {
             foreach ( var audioSource in m_audioSources )
             {
@@ -40,6 +40,11 @@ namespace Kogane
                 if ( volume != null )
                 {
                     audioSource.volume = ( float )volume;
+                }
+
+                if ( pitch != null )
+                {
+                    audioSource.pitch = ( float )pitch;
                 }
 
                 audioSource.Play();
