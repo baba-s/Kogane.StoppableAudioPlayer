@@ -31,8 +31,11 @@ namespace Kogane
         /// </summary>
         public StoppableAudioHandle Play( AudioClip audioClip, float? volume, float? pitch )
         {
+            if ( audioClip == null ) return new();
+
             foreach ( var audioSource in m_audioSources )
             {
+                if ( audioSource == null ) continue;
                 if ( audioSource.isPlaying ) continue;
 
                 audioSource.clip = audioClip;
@@ -57,6 +60,7 @@ namespace Kogane
                         () =>
                         {
                             if ( this == null ) throw new OperationCanceledException();
+                            if ( audioSource == null ) throw new OperationCanceledException();
 
                             return UniTask.WaitWhile
                             (
